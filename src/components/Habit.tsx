@@ -6,14 +6,19 @@ interface HabitProps {
     name: string;
     progress: number;
     onDeleteHabit: () => void;
+    onCompleteHabit: () => void;
 }
 
-const Habit:React.FC<HabitProps> = ({name, progress, onDeleteHabit}) => {
+const Habit:React.FC<HabitProps> = ({name, progress, onDeleteHabit, onCompleteHabit}) => {
     return(
         <div className="bg-slate-50 p-5 rounded-lg bg-opacity-75 flex flex-col gap-5 shadow-lg min-w-56">
             <p className="text-2xl text-center">{name}</p>
             <div className="flex justify-around">
-                <button className="bg-green-500 hover:bg-green-800 text-white w-8 h-8 flex items-center justify-center rounded-full" onClick={() => {}}><FaCheck /></button>
+                <button className="bg-green-500 hover:bg-green-800 text-white w-8 h-8 flex items-center justify-center rounded-full" onClick={
+                    () => {
+                        onCompleteHabit();
+                    }
+                    }><FaCheck /></button>
                 <button className="bg-red-500 hover:bg-red-800 text-white w-8 h-8 flex items-center justify-center rounded-full"
                 onClick={
                     () => {

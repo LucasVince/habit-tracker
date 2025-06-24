@@ -5,6 +5,7 @@ import {useEffect, useState} from 'react';
 interface HabitsInterface {
   name: string;
   progress: number;
+  completedDays?: boolean[];
 }
 
 const App = () => {
@@ -17,7 +18,8 @@ const App = () => {
   const addHabit = (name: string) => {
     const newHabit: HabitsInterface = {
       name: name,
-      progress: 0
+      progress: 0,
+      completedDays: Array(7).fill(false)
     };
     setHabits([...habits, newHabit]);
   }
@@ -27,9 +29,31 @@ const App = () => {
     setHabits(newHabits);
   }
 
+  const completeHabit = (index: number, day: number) => {
+    setHabits(prevHabits => {
+      const updatedHabits = [...prevHabits];
+      const habit = updatedHabits[index];
+
+      
+      const updatedCompletedDays = habit.completedDays ? [...habit.completedDays] : Array(7).fill(false);
+      updatedCompletedDays[day] = true;
+
+      const updatedProgress = updatedCompletedDays.filter(day => day).length / 7 * 100;
+      habit.progress = updatedProgress;
+
+      updatedHabits[index] = {
+        ...habit,
+        progress: Math.round(updatedProgress),
+        completedDays: updatedCompletedDays,
+      }
+
+      return updatedHabits;
+    })
+  }
+
   return (
     <div className="w-screen h-screen bg-gradient-to-r from-purple-800 to-purple-400 flex flex-col items-center p-10 gap-20">
-      <HabitsContainer listHabits={habits} onDeleteHabit={deleteHabit}/>
+      <HabitsContainer listHabits={habits} onDeleteHabit={deleteHabit} onCompleteHabit={completeHabit}/>
       <AddHabitsContainer onAddHabit={addHabit}/>
     </div>
   )
