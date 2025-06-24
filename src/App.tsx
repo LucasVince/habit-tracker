@@ -6,6 +6,7 @@ interface HabitsInterface {
   name: string;
   progress: number;
   completedDays?: boolean[];
+  habitType: string;
 }
 
 const App = () => {
@@ -15,11 +16,12 @@ const App = () => {
     localStorage.setItem('habits', JSON.stringify(habits));
   }, [habits])
 
-  const addHabit = (name: string) => {
+  const addHabit = (name: string, habitType: string) => {
     const newHabit: HabitsInterface = {
       name: name,
       progress: 0,
-      completedDays: Array(7).fill(false)
+      completedDays: habitType === 'weekly' ? Array(7).fill(false) : Array(30).fill(false),
+      habitType: habitType,
     };
     setHabits([...habits, newHabit]);
   }
@@ -35,10 +37,10 @@ const App = () => {
       const habit = updatedHabits[index];
 
       
-      const updatedCompletedDays = habit.completedDays ? [...habit.completedDays] : Array(7).fill(false);
+      const updatedCompletedDays = habit.completedDays ? [...habit.completedDays] : habit.habitType === 'weekly'? Array(7).fill(false) : Array(30).fill(false);
       updatedCompletedDays[day] = true;
 
-      const updatedProgress = updatedCompletedDays.filter(day => day).length / 7 * 100;
+      const updatedProgress = updatedCompletedDays.filter(day => day).length / (habit.habitType === 'weekly'? 7 : 30) * 100;
       habit.progress = updatedProgress;
 
       updatedHabits[index] = {

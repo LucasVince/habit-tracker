@@ -5,6 +5,8 @@ interface HabitsContainerProps {
     listHabits: {
         name: string;
         progress: number;
+        completedDays?: boolean[];
+        habitType: string;
     }[];
     onDeleteHabit: (index: number) => void;
     onCompleteHabit: (index: number, day: number) => void;
@@ -17,7 +19,7 @@ const HabitsContainer: React.FC<HabitsContainerProps> = ({listHabits, onDeleteHa
                 <Habit key={index} name={habit.name} progress={habit.progress} onDeleteHabit={
                     () => onDeleteHabit(index)
                 } onCompleteHabit={
-                    () => onCompleteHabit(index, new Date().getDay())
+                    () => onCompleteHabit(index, habit.habitType === 'weekly'? new Date().getDay() : new Date().getDate() - 1)
                 }/>
             ))}
         </div>
