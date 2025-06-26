@@ -53,6 +53,43 @@ const App = () => {
     })
   }
 
+  const resetAllHabits = () => {
+    if (new Date().getDay() == 0) {
+        setHabits(prevHabits => {
+          const updatedHabits = prevHabits.map(habit => {
+            if (habit.habitType == 'weekly') {
+              return {
+                ...habit,
+                progress: 0,
+                completedDays: Array(7).fill(false)
+              }
+            }
+            return habit
+          })
+          return updatedHabits
+        })
+    }
+    if (new Date().getDate() - 1 == 0) {
+      setHabits(prevHabits => {
+        const updatedHabits = prevHabits.map(habit => {
+          if (habit.habitType == 'monthly') {
+            return {
+              ...habit,
+              progress: 0,
+              completedDays: Array(30).fill(false)
+            }
+          }
+          return habit
+        })
+        return updatedHabits
+      })
+  }
+  }
+
+  useEffect(() => {
+    resetAllHabits()
+  }, [])
+
   return (
     <div className="w-screen h-screen bg-gradient-to-r from-purple-800 to-purple-400 flex flex-col items-center p-10 gap-20">
       <HabitsContainer listHabits={habits} onDeleteHabit={deleteHabit} onCompleteHabit={completeHabit}/>
